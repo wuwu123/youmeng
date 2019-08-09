@@ -15,7 +15,7 @@ class IosPayload implements PayLoad
      * 角标
      * @var int
      */
-    private $badge = 0;
+    private $badge = null;
 
     /**
      * @param array $otherParams
@@ -98,7 +98,9 @@ class IosPayload implements PayLoad
         }
         $data = $this->otherParams;
         $aps['content-available'] = $available;
-        $aps['badge'] = $this->badge;
+        if (null !== $this->badge) {
+            $aps['badge'] = $this->badge;
+        }
         if ($this->alert) {
             $aps['alert'] = $this->alert;
         }
