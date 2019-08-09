@@ -1,11 +1,10 @@
 {
-    "name": "wujie/rongyun",
-    "description": "融云消息推送",
+    "name": "wujie/youmeng",
+    "description": "友盟消息推送",
     "type": "library",
     "require": {
         "php": ">=7.1",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/cache": "^4.3",
         "ext-json": "*"
     },
     "authors": [
