@@ -19,6 +19,14 @@ class Tool
         return false;
     }
 
+    /**
+     * 重试
+     * @param $times
+     * @param callable $callback
+     * @param int $sleep
+     * @return mixed
+     * @throws \Throwable
+     */
     public static function retry($times, callable $callback, $sleep = 0)
     {
         beginning:
