@@ -4,6 +4,7 @@
 namespace Youmeng\Request;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Youmeng\Config\Config;
 use Youmeng\Tool;
@@ -109,13 +110,14 @@ class HttpRequest
      */
     private function request($method, $path, $data = [])
     {
+        $this->isSuccess = false;
         try {
             $data['appkey'] = $this->config->getAppKey();
             $data['timestamp'] = time();
             $url = $this->getUrl($method, $path, $data);
             /*** @var ResponseInterface $request */
             $this->response = Tool::retry($this->retry, function () use ($method, $url, $data) {
-                $this->requestModel->request($method, $url, ['body' => $data]);
+                $this->requestModel->request($method, $url, ['json' => $data]);
             });
             $data = \GuzzleHttp\json_decode($this->response->getBody(), true);
             $ret = $data['ret'] ?? '';
