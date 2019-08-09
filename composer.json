@@ -1,0 +1,25 @@
+{
+    "name": "wujie/rongyun",
+    "description": "融云消息推送",
+    "type": "library",
+    "require": {
+        "php": ">=7.1",
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/cache": "^4.3",
+        "ext-json": "*"
+    },
+    "authors": [
+        {
+            "name": "武杰",
+            "email": "1224805548@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Rongun\\": "src/"
+        }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.15"
+    }
+}
