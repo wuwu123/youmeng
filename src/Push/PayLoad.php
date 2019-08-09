@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Rongun\Push;
+namespace Youmeng\Push;
 
 interface PayLoad
 {

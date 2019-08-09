@@ -1,19 +1,19 @@
 <?php
 
 
-namespace Rongun\Request;
+namespace Youmeng\Request;
 
-use Rongun\Config\Config;
-use Rongun\Push\AndroidPayLoad;
-use Rongun\Push\IosPayload;
-use Rongun\Push\Message;
-use Rongun\Push\PayLoad;
-use Rongun\Push\Policy;
+use Youmeng\Config\Config;
+use Youmeng\Push\AndroidPayLoad;
+use Youmeng\Push\IosPayload;
+use Youmeng\Push\Message;
+use Youmeng\Push\PayLoad;
+use Youmeng\Push\Policy;
 
 /**
  * 纸箱列表推送
  * Class SendRequest
- * @package Rongun\Request
+ * @package Youmeng\Request
  */
 class SendRequest
 {

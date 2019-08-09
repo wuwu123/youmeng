@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Rongun\Push;
+namespace Youmeng\Push;
 
-use Rongun\Tool;
+use Youmeng\Tool;
 
 /**
  * 发送策略
  * Class Policy
- * @package Rongun\Push
+ * @package Youmeng\Push
  */
 class Policy
 {

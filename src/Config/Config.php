@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Rongun\Config;
+namespace Youmeng\Config;
 
 class Config
 {
