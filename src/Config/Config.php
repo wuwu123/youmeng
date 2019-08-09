@@ -36,6 +36,12 @@ class Config
     private $timeOut = 5.0;
 
     /**
+     * 正式/测试模式。默认为true
+     * @var string
+     */
+    private $production_mode = 'false';
+
+    /**
      * @return string
      */
     public function getAppKey(): string
@@ -73,6 +79,14 @@ class Config
     public function getTimeOut(): float
     {
         return $this->timeOut;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductionMode(): string
+    {
+        return $this->production_mode;
     }
 
 

@@ -38,9 +38,74 @@ class Message
 
     private $filter = [];
 
-    public function __construct($type, $data)
+    /**
+     * @param string $type
+     * @return $this
+     */
+    public function setType(string $type)
     {
-        $this->init($type, $data);
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @param mixed $device_tokens
+     * @return $this
+     */
+    public function setDeviceTokens($device_tokens)
+    {
+        $this->device_tokens = $device_tokens;
+        return $this;
+    }
+
+    /**
+     * @param mixed $alias_type
+     * @return $this
+     */
+    public function setAliasType($alias_type)
+    {
+        $this->alias_type = $alias_type;
+        return $this;
+    }
+
+    /**
+     * @param mixed $alias
+     * @return $this
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+        return $this;
+    }
+
+    /**
+     * @param mixed $file_id
+     * @return $this
+     */
+    public function setFileId($file_id)
+    {
+        $this->file_id = $file_id;
+        return $this;
+    }
+
+    /**
+     * @param array $filter
+     * @return $this
+     */
+    public function setFilter(array $filter)
+    {
+        $this->filter = $filter;
+        return $this;
+    }
+
+    private function __construct()
+    {
+    }
+
+
+    public static function make()
+    {
+        return new self();
     }
 
     /**

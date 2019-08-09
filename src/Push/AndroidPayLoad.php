@@ -223,10 +223,11 @@ class AndroidPayLoad implements PayLoad
         }
 
         $data['display_type'] = $this->display_type;
+        $validTitle = $this->getValidTitle();
         $body = [
-            'title' => $this->title ?? $this->getValidTitle(),
-            'ticker' => $this->ticker ?? $this->getValidTitle(),
-            'text' => $this->text ?? $this->getValidTitle(),
+            'title' => $this->title ?? $validTitle,
+            'ticker' => $this->ticker ?? $validTitle,
+            'text' => $this->text ?? $validTitle,
             'play_vibrate' => $this->play_vibrate,
             'play_lights' => $this->play_lights,
             'play_sound' => $this->play_sound,
@@ -268,7 +269,7 @@ class AndroidPayLoad implements PayLoad
             }
         }
         $data['body'] = $body;
-        $data['extra'] = json_encode($this->extra);
+        $data['extra'] = $this->extra;
         return $data;
     }
 }

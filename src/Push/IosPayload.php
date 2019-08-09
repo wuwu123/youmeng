@@ -12,6 +12,12 @@ class IosPayload implements PayLoad
     private $alert = [];
 
     /**
+     * 角标
+     * @var int
+     */
+    private $badge = 0;
+
+    /**
      * @param array $otherParams
      * @return $this
      */
@@ -44,6 +50,16 @@ class IosPayload implements PayLoad
             'subtitle' => $subtitle,
             'body' => $body
         ];
+        return $this;
+    }
+
+    /**
+     * @param int $badge
+     * @return $this
+     */
+    public function setBadge(int $badge)
+    {
+        $this->badge = $badge;
         return $this;
     }
 
@@ -82,6 +98,7 @@ class IosPayload implements PayLoad
         }
         $data = $this->otherParams;
         $aps['content-available'] = $available;
+        $aps['badge'] = $this->badge;
         if ($this->alert) {
             $aps['alert'] = $this->alert;
         }
