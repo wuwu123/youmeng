@@ -115,9 +115,10 @@ class SendRequest
      * @param array $otherParams
      * @param string $ticker
      * @param string $sign
+     * @param string $description
      * @return array
      */
-    public function iosSend(string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $sign = '')
+    public function iosSend(string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $sign = '', $description = '')
     {
         $otherParams['url'] = $url;
         $message = $this->getMessage($deviceToken);
@@ -127,6 +128,6 @@ class SendRequest
             ->setOtherParams($otherParams)
             ->setBadge('+1');
         $policy = Policy::make()->setOutBizNo($sign);
-        return $this->send($message, $payload, $policy);
+        return $this->send($message, $payload, $policy , ['description'=>$description]);
     }
 }
