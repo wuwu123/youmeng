@@ -95,7 +95,7 @@ class HttpRequest
      */
     public function getUrl($method, $path, $data = [])
     {
-        $url = trim($this->config->getBaseUrl(), "/") . '/' . ltrim($path, "/");
+        $url = $path ? trim($this->config->getBaseUrl(), "/") . '/' . ltrim($path, "/") : $this->config->getBaseUrl();
         $postBody = json_encode($data);
         $sign = md5($method . $url . $postBody . $this->config->getMasterSecret());
         return $url . "?sign=" . $sign;

@@ -9,6 +9,7 @@ use Youmeng\Push\IosPayload;
 use Youmeng\Push\Message;
 use Youmeng\Push\PayLoad;
 use Youmeng\Push\Policy;
+use Youmeng\Safety\Safety;
 
 /**
  * 纸箱列表推送
@@ -24,15 +25,25 @@ class SendRequest
 
     public $requestModel;
 
+    /**
+     * @var Safety
+     */
+    private $safety;
+
     public function __construct(Config $config)
     {
         $this->config = $config;
         $this->requestModel = new HttpRequest($this->config);
+        $this->safety = new Safety($this->config);
     }
 
     public function send(Message $message, PayLoad $payLoad, Policy $policy, array $otherParams = [])
     {
         $otherParams['production_mode'] = $this->config->getProductionMode();
+        [$checkBool, $errormsg] = $this->safety->checkKey('api/send', $message->getData());
+        if (!$checkBool) {
+            return [$checkBool, $errormsg ?? "安全规则限制 ，相同的消息频繁发送"];
+        }
         $this->requestModel->post('api/send', array_merge(
             $message->getData(),
             ['payload' => $payLoad->getData()],
@@ -98,10 +109,10 @@ class SendRequest
      * @param string $url
      * @param array $otherParams
      * @param string $ticker
-     * @param string $sign
+     * @param string $sign 消息唯一标识
      * @return array
      */
-    public function androidMessage(string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $sign = '')
+    public function androidMessage($sign, string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '')
     {
         return $this->androidSend(AndroidPayLoad::TYPE_MESSAGE, $deviceToken, $title, $text, $url, $otherParams, $ticker, $sign);
     }
@@ -114,11 +125,11 @@ class SendRequest
      * @param string $url
      * @param array $otherParams
      * @param string $ticker
-     * @param string $sign
+     * @param string $sign 消息唯一标识
      * @param string $description
      * @return array
      */
-    public function iosSend(string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $sign = '', $description = '')
+    public function iosSend($sign, string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $description = '')
     {
         $otherParams['url'] = $url;
         $message = $this->getMessage($deviceToken);
@@ -128,6 +139,6 @@ class SendRequest
             ->setOtherParams($otherParams)
             ->setBadge('+1');
         $policy = Policy::make()->setOutBizNo($sign);
-        return $this->send($message, $payload, $policy , ['description'=>$description]);
+        return $this->send($message, $payload, $policy, ['description' => $description]);
     }
 }

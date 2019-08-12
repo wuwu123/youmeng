@@ -42,6 +42,19 @@ class Config
     private $production_mode = 'false';
 
     /**
+     * redis Model
+     * @var \Redis
+     */
+    private $redisModel = null;
+
+    /**
+     * 安全规则
+     * @var array
+     * [['type'=>'messageType' , time => 4 , 'count'=>1]]
+     */
+    private $safety = [];
+
+    /**
      * @return string
      */
     public function getAppKey(): string
@@ -87,6 +100,22 @@ class Config
     public function getProductionMode(): string
     {
         return $this->production_mode;
+    }
+
+    /**
+     * @return \Redis
+     */
+    public function getRedisModel(): \Redis
+    {
+        return $this->redisModel;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSafety(): array
+    {
+        return $this->safety;
     }
 
 
