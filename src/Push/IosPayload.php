@@ -78,7 +78,7 @@ class IosPayload implements PayLoad
         if ($this->otherParams) {
             $count = count($this->otherParams);
             $checkData = ['d' => 'd', 'p' => 'p'];
-            if (count(array_map($this->otherParams, $checkData)) != ($count + count($checkData))) {
+            if (count(array_merge($this->otherParams, $checkData)) != ($count + count($checkData))) {
                 throw new \Exception(implode(',', array_keys($checkData)) . "为友盟保留字段");
             }
         }
