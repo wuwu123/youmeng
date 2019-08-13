@@ -11,6 +11,9 @@ use Youmeng\Tool;
 
 class HttpRequest
 {
+    /**
+     * @var Client
+     */
     private $requestModel;
 
     public $retry = 0;
@@ -45,9 +48,13 @@ class HttpRequest
     {
         $this->isSuccess = true;
         $this->returnData = [];
+        $this->config = $config;
         $this->requestModel = new Client(
             [
-                'timeout' => $config->getTimeOut()
+                'timeout' => $config->getTimeOut(),
+                'headers' => [
+                    'Content-Type' => 'application/json'
+                ]
             ]
         );
         $this->retry = $config->getRetryNum();
@@ -113,15 +120,15 @@ class HttpRequest
         $this->isSuccess = false;
         try {
             $data['appkey'] = $this->config->getAppKey();
-            $data['timestamp'] = time();
+            $data['timestamp'] = (string)time();
             $url = $this->getUrl($method, $path, $data);
             /*** @var ResponseInterface $request */
             $this->response = Tool::retry($this->retry, function () use ($method, $url, $data) {
-                $this->requestModel->request($method, $url, ['json' => $data]);
+                return $this->requestModel->request($method, $url, ['json' => $data]);
             });
             $data = \GuzzleHttp\json_decode($this->response->getBody(), true);
             $ret = $data['ret'] ?? '';
-            if ($ret == self::SUCCESS) {
+            if (strtolower($ret) == self::SUCCESS) {
                 $this->isSuccess = true;
                 $this->returnData = $data;
                 return $this;

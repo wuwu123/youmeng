@@ -46,17 +46,17 @@ class AndroidPayLoad implements PayLoad
     /**
      * @var string 是否震动
      */
-    private $play_vibrate = "true";
+    private $play_vibrate = true;
 
     /**
      * @var string 是否闪灯
      */
-    private $play_lights = "false";
+    private $play_lights = false;
 
     /**
      * @var string 是否发出声音
      */
-    private $play_sound = "true";
+    private $play_sound = true;
 
     /**
      * @var string 点击"通知"的后续行为 默认为"go_app"，值可以为:
@@ -269,7 +269,9 @@ class AndroidPayLoad implements PayLoad
             }
         }
         $data['body'] = $body;
-        $data['extra'] = $this->extra;
+        if ($this->extra) {
+            $data['extra'] = $this->extra;
+        }
         return $data;
     }
 }

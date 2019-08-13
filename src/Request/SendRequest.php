@@ -5,6 +5,7 @@ namespace Youmeng\Request;
 
 use Youmeng\Config\Config;
 use Youmeng\Push\AndroidPayLoad;
+use Youmeng\Push\CommonMessage;
 use Youmeng\Push\IosPayload;
 use Youmeng\Push\Message;
 use Youmeng\Push\PayLoad;
@@ -33,8 +34,8 @@ class SendRequest
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->requestModel = new HttpRequest($this->config);
-        $this->safety = new Safety($this->config);
+        $this->requestModel = new HttpRequest($config);
+        $this->safety = new Safety($config);
     }
 
     public function send(Message $message, PayLoad $payLoad, Policy $policy, array $otherParams = [])
@@ -44,42 +45,42 @@ class SendRequest
         if (!$checkBool) {
             return [$checkBool, $errormsg ?? "安全规则限制 ，相同的消息频繁发送"];
         }
-        $this->requestModel->post('api/send', array_merge(
-            $message->getData(),
-            ['payload' => $payLoad->getData()],
-            ['policy' => $policy->getData()],
-            $otherParams
-        ));
+        $postData = $message->getData();
+        if ($payLoad->getData()) {
+            $postData['payload'] = $payLoad->getData();
+        }
+        if ($policy->getData()) {
+            $postData['policy'] = $policy->getData();
+        }
+        if ($otherParams) {
+            $postData = array_merge($postData, $otherParams);
+        }
+        $this->requestModel->post('api/send', $postData);
         return [$this->requestModel->isOk(), $this->requestModel->getData()];
     }
 
     /**
-     * 指定用户id推送
-     * @param string $deviceToken
+     * @param CommonMessage $message
      * @return Message
+     * @throws \Exception
      */
-    private function getMessage(string $deviceToken): Message
+    private function getMessage(CommonMessage $message): Message
     {
-        $messageModel = Message::make();
-        $messageModel->setType(Message::TYPE_UNI_CAST);
-        $messageModel->setDeviceTokens($deviceToken);
-        if (strpos($deviceToken, ",") !== false) {
-            $messageModel->setType(Message::TYPE_LIST_CAST);
-        }
+        $messageModel = Message::make()->init($message->getMessageType(), $message->getMessageData());
         return $messageModel;
     }
 
-    public function androidSend(string $type, string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $sign = '')
+    public function androidSend($sign, string $type, CommonMessage $comMessage)
     {
-        $message = $this->getMessage($deviceToken);
+        $message = $this->getMessage($comMessage);
         $payload = AndroidPayLoad::make()
             ->setDisplayType($type)
-            ->setTitle($title)
-            ->setText($text)
-            ->setTicker($ticker)
-            ->setExtra($otherParams);
-        if ($url) {
-            $payload->setAfterOpen(AndroidPayLoad::OPEN_URL)->setAfterOpenParams($url);
+            ->setTitle($comMessage->getTitle())
+            ->setText($comMessage->getDesc())
+            ->setTicker($comMessage->getTicker())
+            ->setExtra($comMessage->getOtherParams());
+        if ($comMessage->getUrl()) {
+            $payload->setAfterOpen(AndroidPayLoad::OPEN_URL)->setAfterOpenParams($comMessage->getUrl());
         }
         $policy = Policy::make()->setOutBizNo($sign);
         return $this->send($message, $payload, $policy);
@@ -87,58 +88,42 @@ class SendRequest
 
     /**
      * 通知
-     * @param string $deviceToken
-     * @param $title
-     * @param $text
-     * @param string $url
-     * @param array $otherParams
-     * @param string $ticker
-     * @param string $sign 唯一标识
+     * @param $sign
+     * @param CommonMessage $message
      * @return array
      */
-    public function androidNotification(string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $sign = '')
+    public function androidNotification($sign, CommonMessage $message)
     {
-        return $this->androidSend(AndroidPayLoad::TYPE_NOTIFICATION, $deviceToken, $title, $text, $url, $otherParams, $ticker, $sign);
+        return $this->androidSend($sign, AndroidPayLoad::TYPE_NOTIFICATION, $message);
     }
 
     /**
-     * 消息
-     * @param string $deviceToken
-     * @param $title
-     * @param $text
-     * @param string $url
-     * @param array $otherParams
-     * @param string $ticker
-     * @param string $sign 消息唯一标识
+     * @param $sign
+     * @param CommonMessage $message
      * @return array
      */
-    public function androidMessage($sign, string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '')
+    public function androidMessage($sign, CommonMessage $message)
     {
-        return $this->androidSend(AndroidPayLoad::TYPE_MESSAGE, $deviceToken, $title, $text, $url, $otherParams, $ticker, $sign);
+        return $this->androidSend($sign, AndroidPayLoad::TYPE_MESSAGE, $message);
     }
 
     /**
      * ios 推送
-     * @param string $deviceToken
-     * @param $title
-     * @param $text
-     * @param string $url
-     * @param array $otherParams
-     * @param string $ticker
-     * @param string $sign 消息唯一标识
-     * @param string $description
+     * @param $sign
+     * @param CommonMessage $commonMessage
      * @return array
+     * @throws \Exception
      */
-    public function iosSend($sign, string $deviceToken, $title, $text, $url = '', $otherParams = [], $ticker = '', $description = '')
+    public function iosSend($sign, CommonMessage $commonMessage)
     {
-        $otherParams['url'] = $url;
-        $message = $this->getMessage($deviceToken);
+        $otherParams['url'] = $commonMessage->getUrl();
+        $message = $this->getMessage($commonMessage);
         $payload = IosPayload::make()
             ->setContentAvailable(true)
-            ->setAlert($title, $text, $ticker)
+            ->setAlert($commonMessage->getTitle(), $commonMessage->getDesc(), $commonMessage->getTicker())
             ->setOtherParams($otherParams)
             ->setBadge('+1');
         $policy = Policy::make()->setOutBizNo($sign);
-        return $this->send($message, $payload, $policy, ['description' => $description]);
+        return $this->send($message, $payload, $policy);
     }
 }

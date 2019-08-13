@@ -33,13 +33,13 @@ class Config
      * 超时时间
      * @var float
      */
-    private $timeOut = 5.0;
+    private $timeOut = 2.0;
 
     /**
      * 正式/测试模式。默认为true
      * @var string
      */
-    private $production_mode = 'false';
+    private $production_mode = 'true';
 
     /**
      * redis Model

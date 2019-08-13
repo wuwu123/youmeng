@@ -28,13 +28,13 @@ class Message
      */
     private $type = '';
 
-    private $device_tokens;
+    private $device_tokens = '';
 
-    private $alias_type;
+    private $alias_type = '';
 
-    private $alias;
+    private $alias = '';
 
-    private $file_id;
+    private $file_id = '';
 
     private $filter = [];
 
@@ -113,7 +113,7 @@ class Message
      * @param $data
      * @throws \Exception
      */
-    private function init($type, $data)
+    public function init($type, $data)
     {
         switch ($type) {
             case self::TYPE_UNI_CAST:
@@ -130,9 +130,15 @@ class Message
                 break;
             case self::TYPE_BROAD_CAST:
                 break;
+            case self::TYPE_CUSTOMIZE_CAST:
+                $this->alias = $data;
+                $this->alias_type = 'alias';
+                break;
             default:
                 throw new \Exception("暂不支持");
         }
+        $this->type = $type;
+        return $this;
     }
 
     public function getData()
@@ -143,7 +149,7 @@ class Message
             "alias_type" => $this->alias_type,
             "alias" => $this->alias,
             "file_id" => $this->file_id,
-            "filter" => json_encode($this->filter)
+            // "filter" => $this->filter
         ];
     }
 }
