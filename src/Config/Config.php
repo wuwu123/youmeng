@@ -105,7 +105,7 @@ class Config
     /**
      * @return \Redis
      */
-    public function getRedisModel(): \Redis
+    public function getRedisModel()
     {
         return $this->redisModel;
     }
