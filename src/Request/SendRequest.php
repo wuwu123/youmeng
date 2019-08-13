@@ -78,7 +78,8 @@ class SendRequest
             ->setTitle($comMessage->getTitle())
             ->setText($comMessage->getDesc())
             ->setTicker($comMessage->getTicker())
-            ->setExtra($comMessage->getOtherParams());
+            ->setExtra($comMessage->getOtherParams())
+            ->setCustom($comMessage->getAndroidCustom());
         if ($comMessage->getUrl()) {
             $payload->setAfterOpen(AndroidPayLoad::OPEN_URL)->setAfterOpenParams($comMessage->getUrl());
         }

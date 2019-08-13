@@ -3,7 +3,6 @@
 
 namespace Youmeng\Push;
 
-
 class CommonMessage
 {
     private $messageType;
@@ -16,6 +15,29 @@ class CommonMessage
     private $url = '';
 
     private $otherParams = [];
+
+    /**
+     * 定制的
+     */
+    private $androidCustom;
+
+    /**
+     * @return mixed
+     */
+    public function getAndroidCustom()
+    {
+        return $this->androidCustom;
+    }
+
+    /**
+     * @param mixed $androidCustom
+     * @return $this
+     */
+    public function setAndroidCustom($androidCustom)
+    {
+        $this->androidCustom = $androidCustom;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -142,6 +164,4 @@ class CommonMessage
         $this->otherParams = $otherParams;
         return $this;
     }
-
-
 }

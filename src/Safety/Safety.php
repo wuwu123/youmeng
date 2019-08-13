@@ -3,7 +3,6 @@
 
 namespace Youmeng\Safety;
 
-
 use Youmeng\Config\Config;
 
 /**
@@ -64,5 +63,4 @@ class Safety
         }
         return [true, ''];
     }
-
 }

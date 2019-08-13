@@ -9,10 +9,10 @@ class AndroidPayLoad implements PayLoad
 
     const TYPE_MESSAGE = 'message';
 
-    const OPEN_APP = 'app';
-    const OPEN_URL = 'url';
-    const OPEN_ACTIVITY = 'activity';
-    const OPEN_CUSTOM = 'custom';
+    const OPEN_APP = 'go_app';
+    const OPEN_URL = 'go_url';
+    const OPEN_ACTIVITY = 'go_activity';
+    const OPEN_CUSTOM = 'go_custom';
     /**
      * @var string notification(通知)、message(消息)
      */
@@ -76,6 +76,26 @@ class AndroidPayLoad implements PayLoad
      * @var array 扩展字段
      */
     private $extra = [];
+
+    private $custom;
+
+    /**
+     * @return mixed
+     */
+    public function getCustom()
+    {
+        return $this->custom;
+    }
+
+    /**
+     * @param mixed $custom
+     * @return $this
+     */
+    public function setCustom($custom)
+    {
+        $this->custom = $custom;
+        return $this;
+    }
 
     /**
      * @param string $display_type
@@ -266,6 +286,17 @@ class AndroidPayLoad implements PayLoad
                 default:
                     throw new \Exception("after_open 无效的类型" . $this->after_open);
 
+            }
+        }
+        if (!isset($body['custom'])) {
+            $body['custom'] = $this->custom;
+        }
+        if (
+            $this->display_type == self::TYPE_MESSAGE ||
+            ($this->display_type == self::TYPE_NOTIFICATION && $this->after_open == self::OPEN_CUSTOM)
+        ) {
+            if (empty($body['custom'])) {
+                throw new \Exception("custom 不能为空");
             }
         }
         $data['body'] = $body;
