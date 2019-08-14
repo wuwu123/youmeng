@@ -34,7 +34,7 @@ class Safety
         foreach ($safety as $row) {
             if (isset($row['type'], $row['time'], $row['count']) && $row['time'] && $row['count']) {
                 if ($row['type'] == 'all' || $type == $row['type']) {
-                    $row['message'] = sprintf('%s 类型的消息 ， %s 时间内只能触发 %s 次', $row['type'], $rules['time'], $row['count']);
+                    $row['message'] = sprintf('%s 类型的消息 ， %s 时间内只能触发 %s 次', $row['type'], $row['time'], $row['count']);
                     $rules[] = $row;
                 }
             }
