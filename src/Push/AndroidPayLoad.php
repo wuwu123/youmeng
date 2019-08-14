@@ -238,10 +238,6 @@ class AndroidPayLoad implements PayLoad
      */
     public function getData(): array
     {
-        if (!$this->title || !$this->text || $this->ticker) {
-            throw new \Exception("title 不能为空");
-        }
-
         $data['display_type'] = $this->display_type;
         $validTitle = $this->getValidTitle();
         $body = [
