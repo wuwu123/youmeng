@@ -16,6 +16,9 @@ class CommonMessage
 
     private $otherParams = [];
 
+
+    private $alias_type = '';
+
     /**
      * 定制的
      */
@@ -162,6 +165,24 @@ class CommonMessage
     public function setOtherParams(array $otherParams)
     {
         $this->otherParams = $otherParams;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAliasType(): string
+    {
+        return $this->alias_type;
+    }
+
+    /**
+     * @param string $alias_type
+     * @return $this
+     */
+    public function setAliasType(string $alias_type)
+    {
+        $this->alias_type = $alias_type;
         return $this;
     }
 }

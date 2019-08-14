@@ -132,7 +132,6 @@ class Message
                 break;
             case self::TYPE_CUSTOMIZE_CAST:
                 $this->alias = $data;
-                $this->alias_type = 'alias';
                 break;
             default:
                 throw new \Exception("暂不支持");
@@ -149,7 +148,7 @@ class Message
             "alias_type" => $this->alias_type,
             "alias" => $this->alias,
             "file_id" => $this->file_id,
-            // "filter" => $this->filter
+            "filter" => $this->filter
         ];
     }
 }

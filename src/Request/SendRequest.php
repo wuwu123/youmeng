@@ -41,13 +41,14 @@ class SendRequest
     public function send(Message $message, PayLoad $payLoad, Policy $policy, array $otherParams = [])
     {
         $otherParams['production_mode'] = $this->config->getProductionMode();
-        [$checkBool, $errormsg] = $this->safety->checkKey('api/send', $message->getData());
-        if (!$checkBool) {
-            return [$checkBool, $errormsg ?? "安全规则限制 ，相同的消息频繁发送"];
-        }
         $postData = $message->getData();
         if ($payLoad->getData()) {
             $postData['payload'] = $payLoad->getData();
+        }
+        //将header 和 请求体加入规则
+        [$checkBool, $errormsg] = $this->safety->checkKey('api/send', $postData);
+        if (!$checkBool) {
+            return [$checkBool, $errormsg ?? "安全规则限制 ，相同的消息频繁发送"];
         }
         if ($policy->getData()) {
             $postData['policy'] = $policy->getData();
@@ -66,7 +67,9 @@ class SendRequest
      */
     private function getMessage(CommonMessage $message): Message
     {
-        $messageModel = Message::make()->init($message->getMessageType(), $message->getMessageData());
+        $messageModel = Message::make()
+            ->init($message->getMessageType(), $message->getMessageData())
+            ->setAliasType($message->getAliasType());
         return $messageModel;
     }
 
