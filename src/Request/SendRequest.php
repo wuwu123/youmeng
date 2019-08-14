@@ -117,12 +117,11 @@ class SendRequest
      */
     public function iosSend($sign, CommonMessage $commonMessage)
     {
-        $otherParams['url'] = $commonMessage->getUrl();
         $message = $this->getMessage($commonMessage);
         $payload = IosPayload::make()
             ->setContentAvailable(true)
             ->setAlert($commonMessage->getTitle(), $commonMessage->getDesc(), $commonMessage->getTicker())
-            ->setOtherParams($otherParams)
+            ->setOtherParams($commonMessage->getOtherParams())
             ->setBadge('+1');
         $policy = Policy::make()->setOutBizNo($sign);
         return $this->send($message, $payload, $policy);
