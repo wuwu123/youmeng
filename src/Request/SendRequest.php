@@ -45,16 +45,16 @@ class SendRequest
         if ($payLoad->getData()) {
             $postData['payload'] = $payLoad->getData();
         }
-        //将header 和 请求体加入规则
-        [$checkBool, $errormsg] = $this->safety->checkKey('api/send', $postData);
-        if (!$checkBool) {
-            return [$checkBool, $errormsg ?? "安全规则限制 ，相同的消息频繁发送"];
-        }
         if ($policy->getData()) {
             $postData['policy'] = $policy->getData();
         }
         if ($otherParams) {
             $postData = array_merge($postData, $otherParams);
+        }
+        //将header 和 请求体加入规则
+        [$checkBool, $errormsg] = $this->safety->checkKey('api/send', $postData);
+        if (!$checkBool) {
+            return [$checkBool, $errormsg ?? "安全规则限制 ，相同的消息频繁发送"];
         }
         $this->requestModel->post('api/send', $postData);
         return [$this->requestModel->isOk(), $this->requestModel->getData()];

@@ -48,7 +48,7 @@ class Safety
         if (empty($safety)) {
             return [true, ''];
         }
-        unset($data['timestamp']);
+        unset($data['timestamp'], $data['policy']['out_biz_no']);
         $type = $data['type'] ?? null;
         if (!$type) {
             return [true, ''];
