@@ -17,27 +17,8 @@ use Youmeng\Safety\Safety;
  * Class SendRequest
  * @package Youmeng\Request
  */
-class SendRequest
+class SendRequest extends BaseRequest
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
-    public $requestModel;
-
-    /**
-     * @var Safety
-     */
-    private $safety;
-
-    public function __construct(Config $config)
-    {
-        $this->config = $config;
-        $this->requestModel = new HttpRequest($config);
-        $this->safety = new Safety($config);
-    }
-
     public function send(Message $message, PayLoad $payLoad, Policy $policy, array $otherParams = [])
     {
         $otherParams['production_mode'] = $this->config->getProductionMode();

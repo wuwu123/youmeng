@@ -124,6 +124,7 @@ class HttpRequest
             $url = $this->getUrl($method, $path, $data);
             /*** @var ResponseInterface $request */
             $this->response = Tool::retry($this->retry, function () use ($method, $url, $data) {
+                var_dump($data);
                 return $this->requestModel->request($method, $url, ['json' => $data]);
             });
             $data = \GuzzleHttp\json_decode($this->response->getBody(), true);
