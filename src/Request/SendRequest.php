@@ -105,8 +105,10 @@ class SendRequest extends BaseRequest
         $payload = IosPayload::make()
             ->setContentAvailable(true)
             ->setAlert($commonMessage->getTitle(), $commonMessage->getDesc(), $commonMessage->getTicker())
-            ->setOtherParams($commonMessage->getOtherParams())
-            ->setBadge('+1');
+            ->setOtherParams($commonMessage->getOtherParams());
+        if ($commonMessage->getIosBadge()) {
+            $payload->setBadge($commonMessage->getIosBadge());
+        }
         $policy = Policy::make()->setOutBizNo($sign);
         return $this->send($message, $payload, $policy);
     }

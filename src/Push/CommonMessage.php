@@ -19,6 +19,26 @@ class CommonMessage
 
     private $alias_type = '';
 
+    private $iosBadge = '';
+
+    /**
+     * @return string
+     */
+    public function getIosBadge()
+    {
+        return $this->iosBadge;
+    }
+
+    /**
+     * @param string $iosBadge
+     * @return $this
+     */
+    public function setIosBadge($iosBadge)
+    {
+        $this->iosBadge = $iosBadge;
+        return $this;
+    }
+
     /**
      * 定制的
      */
