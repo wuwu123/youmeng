@@ -118,6 +118,88 @@ class Config
         return $this->safety;
     }
 
+    /**
+     * @param string $appKey
+     * @return $this
+     */
+    public function setAppKey(string $appKey)
+    {
+        $this->appKey = $appKey;
+        return $this;
+    }
+
+    /**
+     * @param string $masterSecret
+     * @return $this
+     */
+    public function setMasterSecret(string $masterSecret)
+    {
+        $this->masterSecret = $masterSecret;
+        return $this;
+    }
+
+    /**
+     * @param string $baseUrl
+     * @return $this
+     */
+    public function setBaseUrl(string $baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+        return $this;
+    }
+
+    /**
+     * @param int $retryNum
+     * @return $this
+     */
+    public function setRetryNum(int $retryNum)
+    {
+        $this->retryNum = $retryNum;
+        return $this;
+    }
+
+    /**
+     * @param float $timeOut
+     * @return $this
+     */
+    public function setTimeOut(float $timeOut)
+    {
+        $this->timeOut = $timeOut;
+        return $this;
+    }
+
+    /**
+     * @param string $production_mode
+     * @return $this
+     */
+    public function setProductionMode(string $production_mode)
+    {
+        $this->production_mode = $production_mode;
+        return $this;
+    }
+
+    /**
+     * @param \Redis $redisModel
+     * @return $this
+     */
+    public function setRedisModel($redisModel)
+    {
+        $this->redisModel = $redisModel;
+        return $this;
+    }
+
+    /**
+     * @param array $safety
+     * @return $this
+     */
+    public function setSafety(array $safety)
+    {
+        $this->safety = $safety;
+        return $this;
+    }
+
+
+
 
     public function __construct(array $data)
     {
