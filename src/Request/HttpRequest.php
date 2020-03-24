@@ -4,6 +4,7 @@
 namespace Youmeng\Request;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Youmeng\Config\Config;
@@ -134,6 +135,10 @@ class HttpRequest
                 return $this;
             }
             $this->errorMessage = $data['error_msg'] ?? $data['error_code'] ?? '请求失败';
+        }catch (BadResponseException $e){
+            $this->response = $e->getResponse();
+            $data = json_decode($e->getResponse()->getBody()->getContents() , true);
+            $this->errorMessage = $data['data']['error_msg'] ?? $data['data']['error_code'] ?? '请求失败';
         } catch (\Throwable $e) {
             $this->errorMessage = $e->getMessage();
         }
