@@ -2,6 +2,7 @@
     "name": "wujie/youmeng",
     "description": "友盟消息推送",
     "type": "library",
+    "license": "MIT",
     "require": {
         "php": ">=7.1",
         "guzzlehttp/guzzle": "^6.3",
