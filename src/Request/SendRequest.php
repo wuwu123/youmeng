@@ -34,7 +34,7 @@ class SendRequest extends BaseRequest
         }
         //将header 和 请求体加入规则
         [$checkBool, $errormsg] = $this->safety->checkKey('api/send', $postData);
-        if (!$checkBool) {
+        if (! $checkBool) {
             return [$checkBool, $errormsg ?? "安全规则限制 ，相同的消息频繁发送"];
         }
         $this->requestModel->post('api/send', $postData);
@@ -54,7 +54,7 @@ class SendRequest extends BaseRequest
         return $messageModel;
     }
 
-    public function androidSend($sign, string $type, CommonMessage $comMessage)
+    public function androidSend($sign, string $type, CommonMessage $comMessage, array $otherParams = [])
     {
         $message = $this->getMessage($comMessage);
         $payload = AndroidPayLoad::make()
@@ -68,28 +68,30 @@ class SendRequest extends BaseRequest
             $payload->setAfterOpen(AndroidPayLoad::OPEN_URL)->setAfterOpenParams($comMessage->getUrl());
         }
         $policy = Policy::make()->setOutBizNo($sign);
-        return $this->send($message, $payload, $policy);
+        return $this->send($message, $payload, $policy, $otherParams);
     }
 
     /**
      * 通知
      * @param $sign
      * @param CommonMessage $message
+     * @param array $otherParams
      * @return array
      */
-    public function androidNotification($sign, CommonMessage $message)
+    public function androidNotification($sign, CommonMessage $message, array $otherParams = [])
     {
-        return $this->androidSend($sign, AndroidPayLoad::TYPE_NOTIFICATION, $message);
+        return $this->androidSend($sign, AndroidPayLoad::TYPE_NOTIFICATION, $message, $otherParams);
     }
 
     /**
      * @param $sign
      * @param CommonMessage $message
+     * @param array $otherParams
      * @return array
      */
-    public function androidMessage($sign, CommonMessage $message)
+    public function androidMessage($sign, CommonMessage $message, array $otherParams = [])
     {
-        return $this->androidSend($sign, AndroidPayLoad::TYPE_MESSAGE, $message);
+        return $this->androidSend($sign, AndroidPayLoad::TYPE_MESSAGE, $message, $otherParams);
     }
 
     /**
@@ -99,7 +101,7 @@ class SendRequest extends BaseRequest
      * @return array
      * @throws \Exception
      */
-    public function iosSend($sign, CommonMessage $commonMessage)
+    public function iosSend($sign, CommonMessage $commonMessage, array $otherParams = [])
     {
         $message = $this->getMessage($commonMessage);
         $payload = IosPayload::make()
@@ -110,6 +112,6 @@ class SendRequest extends BaseRequest
             $payload->setBadge($commonMessage->getIosBadge());
         }
         $policy = Policy::make()->setOutBizNo($sign);
-        return $this->send($message, $payload, $policy);
+        return $this->send($message, $payload, $policy, $otherParams);
     }
 }
