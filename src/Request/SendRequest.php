@@ -67,7 +67,10 @@ class SendRequest extends BaseRequest
         if ($comMessage->getUrl()) {
             $payload->setAfterOpen(AndroidPayLoad::OPEN_URL)->setAfterOpenParams($comMessage->getUrl());
         }
-        $policy = Policy::make()->setOutBizNo($sign);
+        $policy = $sign;
+        if (! ($sign instanceof Policy)) {
+            $policy = Policy::make()->setOutBizNo($sign);
+        }
         return $this->send($message, $payload, $policy, $otherParams);
     }
 
@@ -111,7 +114,10 @@ class SendRequest extends BaseRequest
         if ($commonMessage->getIosBadge()) {
             $payload->setBadge($commonMessage->getIosBadge());
         }
-        $policy = Policy::make()->setOutBizNo($sign);
+        $policy = $sign;
+        if (! ($sign instanceof Policy)) {
+            $policy = Policy::make()->setOutBizNo($sign);
+        }
         return $this->send($message, $payload, $policy, $otherParams);
     }
 }
