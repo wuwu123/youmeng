@@ -55,6 +55,11 @@ class Config
     private $safety = [];
 
     /**
+     * @var null|callable
+     */
+    private $handler = null;
+
+    /**
      * @return string
      */
     public function getAppKey(): string
@@ -198,8 +203,16 @@ class Config
         return $this;
     }
 
+    public function getHandler()
+    {
+        return $this->handler;
+    }
 
-
+    public function setHandler(?callable $handler)
+    {
+        $this->handler = $handler;
+        return $this;
+    }
 
     public function __construct(array $data)
     {

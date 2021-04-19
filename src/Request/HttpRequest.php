@@ -55,7 +55,8 @@ class HttpRequest
                 'timeout' => $config->getTimeOut(),
                 'headers' => [
                     'Content-Type' => 'application/json'
-                ]
+                ],
+                'handler' => $config->getHandler(),
             ]
         );
         $this->retry = $config->getRetryNum();
